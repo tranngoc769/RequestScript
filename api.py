@@ -11,7 +11,7 @@ dir = args.directory
 file = args.file
 env = args.env
 if env is None:
-  env = "stg"
+  env = "local"
 if env not in AVAILABLE_ENV:
   print("Invalid environment")
   exit()
