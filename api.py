@@ -1,26 +1,26 @@
 import subprocess
 import argparse, os
 import json
-AVAILABLE_ENV = ["stg", "uat", "local"]
 parser = argparse.ArgumentParser(description='Process cURL requests by script in a directory')
 parser.add_argument('-d', '--directory', type=str, help='Directory', required=True)
 parser.add_argument('-f', '--file', type=str, help='File name', required=True)
-parser.add_argument('-e', '--env', type=str, help='File name', required=True)
+parser.add_argument('-e', '--env', type=str, help='Environment')
 args = parser.parse_args()
 dir = args.directory
 file = args.file
 env = args.env
 if env is None:
-  env = "local"
-if env not in AVAILABLE_ENV:
-  print("Invalid environment")
-  exit()
+  env = ""
+
 root = os.getcwd()
+env_file_path=env+".env"
 script_path = root + "/"+ dir + '/' + file
 if not os.path.isfile(script_path):
   print("Script not exist")
   exit()
-env_file_path="."+env+".env"
+if not os.path.isfile(env_file_path):
+  print("Environment not exist")
+  exit()
 completed_process = subprocess.run(['bash', script_path, env_file_path],stdout=subprocess.PIPE,check=True)
 output = completed_process.stdout.decode('utf-8')
 try:
